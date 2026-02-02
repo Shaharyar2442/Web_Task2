@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Bouncing Button</title>
+    <style>
+        /* --- CSS Styles --- */
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --button-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            /* Prevents scrollbars when button hits edge */
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+        }
+
+        /* The Control Panel */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            display: flex;
+            gap: 15px;
+            padding: 15px 25px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .ctrl-btn {
+            background: transparent;
+            border: 1px solid var(--text-color);
+            color: var(--text-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .ctrl-btn:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .ctrl-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* The Moving Target Button */
+        #bouncer {
+            position: absolute;
+            /* Essential for movement */
+            width: 140px;
+            height: 140px;
+            background-image: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(118, 75, 162, 0.6);
+            transition: transform 0.1s linear, box-shadow 0.3s ease;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-align: center;
+            line-height: 1.2;
+            color: white;
+            /* Start exactly in the middle */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #bouncer:hover {
+            box-shadow: 0 0 50px rgba(118, 75, 162, 0.9);
+            filter: brightness(1.1);
+        }
+
+        /* Helper text to instruct user */
+        #instruction {
+            position: absolute;
+            top: 20%;
+            color: rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="instruction">Click the circle to start</div>
+
+    <div id="bouncer">Click Me</div>
+
+    <div class="controls">
+        <button class="ctrl-btn" id="btn-slow">Slow Down</button>
+        <button class="ctrl-btn" id="btn-fast">Speed Up</button>
+    </div>
+
+    <script>
+        // --- JavaScript Logic ---
+
+        const bouncer = document.getElementById('bouncer');
+        const instruction = document.getElementById('instruction');
+
+        // State variables
+        let isMoving = false;
+        let animationId;
+
+        // Position and Velocity
+        let posX = window.innerWidth / 2;
+        let posY = window.innerHeight / 2;
+
+        // Normalized direction vector (x, y)
+        let dirX = 0;
+        let dirY = 0;
+
+        // Speed settings
+        let speed = 4;
+        const MAX_SPEED = 25;
+        const MIN_SPEED = 1;
+
+        // Initialize position style purely via JS to prevent offset issues on first click
+        // We subtract radius (70px) so pos X/Y represents the center
+        const radius = 70;
+
+        function updatePosition() {
+            if (!isMoving) return;
+
+            // Update position
+            posX += dirX * speed;
+            posY += dirY * speed;
+
+            // Boundary Checks (Bounce logic)
+            // Right Wall
+            if (posX + radius >= window.innerWidth) {
+                posX = window.innerWidth - radius;
+                dirX = -dirX;
+            }
+            // Left Wall
+            if (posX - radius <= 0) {
+                posX = radius;
+                dirX = -dirX;
+            }
+            // Bottom Wall
+            if (posY + radius >= window.innerHeight) {
+                posY = window.innerHeight - radius;
+                dirY = -dirY;
+            }
+            // Top Wall
+            if (posY - radius <= 0) {
+                posY = radius;
+                dirY = -dirY;
+            }
+
+            // Apply transform
+            // We use translate3d for GPU acceleration
+            bouncer.style.transform = `translate3d(${posX - (window.innerWidth / 2)}px, ${posY - (window.innerHeight / 2)}px, 0)`;
+
+            // Loop
+            animationId = requestAnimationFrame(updatePosition);
+        }
+
+        // Start / Randomize functionality
+        bouncer.addEventListener('click', () => {
+            if (!isMoving) {
+                isMoving = true;
+                instruction.style.opacity = '0';
+                bouncer.innerText = "Catch Me!";
+
+                // Generate random direction
+                const angle = Math.random() * Math.PI * 2;
+                dirX = Math.cos(angle);
+                dirY = Math.sin(angle);
+
+                updatePosition();
+            } else {
+                // Optional: Clicking while moving changes direction randomly
+                const angle = Math.random() * Math.PI * 2;
+                dirX = Math.cos(angle);
+                dirY = Math.sin(angle);
+            }
+        });
+
+        // Speed Controls
+        document.getElementById('btn-fast').addEventListener('click', () => {
+            if (speed < MAX_SPEED) {
+                speed += 2;
+                animateButtonPress('btn-fast');
+            }
+        });
+
+        document.getElementById('btn-slow').addEventListener('click', () => {
+            if (speed > MIN_SPEED) {
+                speed -= 2;
+                if (speed < MIN_SPEED) speed = MIN_SPEED;
+                animateButtonPress('btn-slow');
+            }
+        });
+
+        // Handle Window Resize (Reset to center if lost)
+        window.addEventListener('resize', () => {
+            if (!isMoving) {
+                posX = window.innerWidth / 2;
+                posY = window.innerHeight / 2;
+            }
+        });
+
+        // Helper visual feedback for control buttons
+        function animateButtonPress(id) {
+            const btn = document.getElementById(id);
+            btn.style.transform = "scale(0.90)";
+            setTimeout(() => {
+                btn.style.transform = "scale(1)";
+            }, 100);
+        }
+
+    </script>
+</body>
+
+</html>
