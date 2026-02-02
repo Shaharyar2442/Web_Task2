@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <button onclick="speedUp()">Speed Up</button>
+    <button onclick="speedDown()">Speed Down</button>
+
+    <div id="myDiv"
+        style="width:50px; height:50px; background-color:red; position:absolute; left:100px; top:100px; cursor:pointer;"
+        onclick="changeDir()">
+        Dare to click me
+    </div>
+
+    <script>
+        var x = 100;
+        var y = 100;
+        var dx = 1;
+        var dy = 1;
+        var speed = 2;
+        var interval = null;
+
+        function changeDir() {
+            // Random direction: either 1 or -1
+            if (Math.random() < 0.5) dx = 1; else dx = -1;
+            if (Math.random() < 0.5) dy = 1; else dy = -1;
+
+            if (interval == null) {
+                interval = setInterval(move, 10);
+            }
+        }
+
+        function move() {
+            var div = document.getElementById("myDiv");
+
+            x = x + (dx * speed);
+            y = y + (dy * speed);
+            // Handling edge cases so doesnt go out of screen
+            if (x > window.innerWidth - 50 || x < 0) {
+                dx = -dx;
+            }
+            if (y > window.innerHeight - 50 || y < 0) {
+                dy = -dy;
+            }
+
+            div.style.left = x + "px";
+            div.style.top = y + "px";
+        }
+
+        function speedUp() {
+            speed = speed + 1;
+        }
+
+        function speedDown() {
+            if (speed > 1) {
+                speed = speed - 1;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
