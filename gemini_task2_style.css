@@ -1,0 +1,442 @@
+:root {
+    --sky-top: #A18CD1;
+    --sky-bottom: #FBC2EB;
+    --ground: #65dfc9;
+    --mountain: #6c5ce7;
+    --wood: #8d6e63;
+    --wood-dark: #5d4037;
+    --accent: #fdcb6e;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Fredoka', sans-serif;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* --- SCENERY LAYERS --- */
+.scenery {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: linear-gradient(to bottom, var(--sky-top), var(--sky-bottom));
+}
+
+.sun {
+    position: absolute;
+    top: 50px;
+    left: 100px;
+    width: 80px;
+    height: 80px;
+    background: #ffeaa7;
+    border-radius: 50%;
+    box-shadow: 0 0 40px rgba(255, 234, 167, 0.6);
+}
+
+.cloud {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50px;
+}
+
+.cloud::after {
+    content: '';
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+}
+
+.cloud-1 {
+    top: 100px;
+    right: 20%;
+    width: 120px;
+    height: 40px;
+    animation: float 20s infinite linear;
+}
+
+.cloud-1::after {
+    top: -20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+}
+
+.cloud-2 {
+    top: 150px;
+    right: 40%;
+    width: 100px;
+    height: 35px;
+    animation: float 35s infinite linear reverse;
+}
+
+.mountain {
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-bottom: 300px solid rgba(108, 92, 231, 0.3);
+}
+
+.mountain-1 {
+    left: 10%;
+    bottom: 80px;
+}
+
+.mountain-2 {
+    left: 60%;
+    bottom: 50px;
+    border-bottom-color: rgba(108, 92, 231, 0.5);
+    transform: scale(1.5);
+}
+
+.ground {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    background: #6c5ce7;
+    border-top: 5px solid #a29bfe;
+}
+
+@keyframes float {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100px);
+    }
+}
+
+/* --- UI --- */
+.ui-panel {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    /* Glassmorphism */
+    padding: 15px 30px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    z-index: 100;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+.stat-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+}
+
+.label {
+    font-size: 10px;
+    color: #fff;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.value {
+    font-size: 24px;
+    color: #fff;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.center .value {
+    font-size: 32px;
+    color: var(--accent);
+}
+
+.controls-hint {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+    z-index: 100;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* --- GAME AREA --- */
+#gameArea {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+/* Detailed Bow */
+#bow-container {
+    position: absolute;
+    left: 80px;
+    top: 300px;
+    width: 60px;
+    height: 140px;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.bow-grip {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    width: 8px;
+    height: 30px;
+    background: #3e2723;
+    transform: translateY(-50%);
+    border-radius: 4px;
+    z-index: 2;
+}
+
+.bow-limb-top {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 6px;
+    height: 50%;
+    background: var(--wood);
+    border-radius: 100% 0 0 0;
+    transform-origin: bottom center;
+    transform: rotate(-10deg);
+}
+
+.bow-limb-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    width: 6px;
+    height: 50%;
+    background: var(--wood);
+    border-radius: 0 0 0 100%;
+    transform-origin: top center;
+    transform: rotate(10deg);
+}
+
+.bow-string {
+    position: absolute;
+    left: 20px;
+    top: 0;
+    height: 100%;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* Detailed Arrow */
+#arrow {
+    position: absolute;
+    display: none;
+    width: 70px;
+    height: 6px;
+    z-index: 15;
+    transform-origin: center center;
+    filter: drop-shadow(0 4px 2px rgba(0, 0, 0, 0.2));
+}
+
+.arrow-shaft {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #dcdde1;
+}
+
+.arrow-head {
+    position: absolute;
+    right: 0;
+    top: -2px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid #2f3640;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+}
+
+.arrow-fletching-top {
+    position: absolute;
+    left: 2px;
+    top: -3px;
+    width: 12px;
+    height: 4px;
+    background: #e84118;
+    transform: skewX(-20deg);
+    border-radius: 2px 2px 0 0;
+}
+
+.arrow-fletching-bottom {
+    position: absolute;
+    left: 2px;
+    bottom: -1px;
+    width: 12px;
+    height: 4px;
+    background: #e84118;
+    transform: skewX(20deg);
+    border-radius: 0 0 2px 2px;
+}
+
+/* Obstacles (Crates) */
+.obstacle {
+    position: absolute;
+    width: 40px;
+    height: 80px;
+    background: #e67e22;
+    border: 3px solid #d35400;
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+    /* Crate pattern */
+    background-image: linear-gradient(135deg, rgba(0, 0, 0, 0.1) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1) 75%, transparent 75%, transparent);
+    background-size: 20px 20px;
+    z-index: 12;
+}
+
+/* Target */
+#target {
+    position: absolute;
+    right: 100px;
+    top: 50%;
+    width: 100px;
+    height: 100px;
+    z-index: 10;
+    transition: transform 0.1s;
+}
+
+.target-face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border: 4px solid #fff;
+    overflow: hidden;
+}
+
+.ring {
+    position: absolute;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.white {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+}
+
+.black {
+    width: 80%;
+    height: 80%;
+    background: #2d3436;
+}
+
+.blue {
+    width: 60%;
+    height: 60%;
+    background: #0984e3;
+}
+
+.red {
+    width: 40%;
+    height: 40%;
+    background: #d63031;
+}
+
+.yellow {
+    width: 20%;
+    height: 20%;
+    background: #fdcb6e;
+}
+
+/* Particles */
+.particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(20px) scale(0);
+    }
+}
+
+/* Game Over Modal */
+.hidden {
+    display: none !important;
+}
+
+#gameOverModal {
+    position: fixed;
+    inset: 0;
+    background: rgba(45, 52, 54, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+}
+
+.modal-card {
+    background: white;
+    padding: 40px 60px;
+    border-radius: 30px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+    color: #6c5ce7;
+    margin-bottom: 20px;
+    font-size: 32px;
+}
+
+.final-score-box {
+    background: #f1f2f6;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.fs-value {
+    display: block;
+    font-size: 48px;
+    color: #2d3436;
+    font-weight: bold;
+}
+
+button {
+    background: #6c5ce7;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 18px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+    box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(108, 92, 231, 0.4);
+}
