@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archery Game Task 2</title>
+    <link rel="stylesheet" href="Shaharyar_task2.css">
+</head>
+
+<body>
+
+    <div id="game-container">
+        <!-- UI Layer -->
+        <div id="ui-layer">
+            <div id="score-board">Score: <span id="score">0</span></div>
+            <div id="timer-board">Time: <span id="time">60</span>s</div>
+        </div>
+
+        <!-- Game Over Message -->
+        <div id="game-over-msg" class="hidden">
+            <h2>Game Over!</h2>
+            <p>Your Final Score: <span id="final-score">0</span></p>
+            <button id="restart-btn">Play Again</button>
+        </div>
+
+        <!-- Game Elements -->
+        <div id="target"></div>
+        <div id="bow"></div>
+        <div id="arrow"></div>
+    </div>
+
+    <!-- Controls -->
+    <div id="controls">
+        <button id="left-btn">Left</button>
+        <button id="right-btn">Right</button>
+        <button id="start-btn">Start Game</button>
+        <button id="reset-btn">Reset Game</button>
+        <p>Instructions: Click "Start Game". Use Left/Right buttons or Arrow Keys to move. Press "Space" or Click to
+            Shoot!</p>
+    </div>
+
+    <script src="Shaharyar_task2.js"></script>
+</body>
+
+</html>
