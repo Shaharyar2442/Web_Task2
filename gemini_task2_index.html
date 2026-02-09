@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zen Archery - Master</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="gemini_task2_style.css">
+</head>
+
+<body>
+
+    <div class="scenery">
+        <div class="sun"></div>
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="mountain mountain-1"></div>
+        <div class="mountain mountain-2"></div>
+        <div class="ground"></div>
+    </div>
+
+    <div class="ui-panel">
+        <div class="stat-group">
+            <span class="label">SCORE</span>
+            <span class="value" id="score">0</span>
+        </div>
+        <div class="stat-group center">
+            <span class="label">TIME</span>
+            <span class="value" id="time">60</span>
+        </div>
+        <div class="stat-group">
+            <span class="label">LEVEL</span>
+            <span class="value" id="level">1</span>
+        </div>
+    </div>
+
+    <div class="controls-hint">
+        <div><b>W / S</b> to Move</div>
+        <div><b>MOUSE</b> to Aim</div>
+        <div><b>CLICK</b> to Shoot</div>
+    </div>
+
+    <div id="gameArea">
+        <div id="obstacles-container"></div>
+
+        <div id="particles-container"></div>
+
+        <div id="bow-container">
+            <div class="bow-limb-top"></div>
+            <div class="bow-limb-bottom"></div>
+            <div class="bow-grip"></div>
+            <div class="bow-string"></div>
+        </div>
+
+        <div id="arrow">
+            <div class="arrow-head"></div>
+            <div class="arrow-shaft"></div>
+            <div class="arrow-fletching-top"></div>
+            <div class="arrow-fletching-bottom"></div>
+        </div>
+
+        <div id="target">
+            <div class="target-face">
+                <div class="ring white"></div>
+                <div class="ring black"></div>
+                <div class="ring blue"></div>
+                <div class="ring red"></div>
+                <div class="ring yellow"></div>
+            </div>
+            <div class="target-stand"></div>
+        </div>
+    </div>
+
+    <div id="gameOverModal" class="hidden">
+        <div class="modal-card">
+            <h2>Time's Up!</h2>
+            <div class="final-score-box">
+                <span class="fs-label">Final Score</span>
+                <span class="fs-value" id="finalScore">0</span>
+            </div>
+            <p>High Level: <span id="finalLevel">1</span></p>
+            <button id="restartBtn">Play Again</button>
+        </div>
+    </div>
+
+    <script src="gemini_task2_script.js"></script>
+</body>
+
+</html>
